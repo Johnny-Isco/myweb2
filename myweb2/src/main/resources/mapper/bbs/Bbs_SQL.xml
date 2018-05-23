@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="bbs">
+	
+	<!-- 게시물 목록 조회 쿼리 -->
+	<select id="selectBoardList" parameterType="HashMap" resultType="HashMap">
+		SELECT 
+			IDX, 
+			TITLE, 
+			HIT_CNT, 
+			CREA_DTM 
+		FROM 
+			TB_BOARD 
+		WHERE 
+			DEL_GB = 'N' 
+		ORDER BY IDX DESC
+	</select>
+	
+	<!-- 게시물 등록 쿼리 -->
+	<insert id="insertBoard" parameterType="HashMap">
+		INSERT INTO TB_BOARD 
+		(
+			IDX, 
+			TITLE, 
+			CONTENTS, 
+			HIT_CNT, 
+			DEL_GB, 
+			CREA_DTM, 
+			CREA_ID
+		)
+		VALUES
+		(
+			SEQ_TB_BOARD_IDX.NEXTVAl, 
+			#{TITLE}, 
+			#{CONTENTS}, 
+			0, 
+			'N', 
+			SYSDATE, 
+			'Admin'
+		)
+	</insert>
+	
+	<!-- 게시물 조회수 증가 쿼리 -->
+	<update id="updateHitCnt" parameterType="HashMap">
+		UPDATE TB_BOARD 
+		SET 
+			HIT_CNT = NVL(HIT_CNT, 0) 
+		WHERE
+			IDX = #{IDX}
+	</update>
+	
+	<!-- 게시물 상세보기 쿼리 -->
+	<select id="selectBoardDetail" parameterType="HashMap" resultType="HashMap">
+		SELECT 
+			IDX, 
+			HIT_CNT, 
+			CREA_ID, 
+			CREA_DTM, 
+			TITLE, 
+			CONTENTS 
+		FROM 
+			TB_BOARD 
+		WHERE 
+			IDX = #{IDX}
+	</select>
+	
+	<!-- 게시물 수정 쿼리 -->
+	<update id="boardUpdate" parameterType="HashMap">
+		UPDATE TB_BOARD 
+		SET 
+			TITLE = #{TITLE}, 
+			CONTENTS = #{CONTENTS} 
+		WHERE 
+			IDX = #{IDX}
+	</update>
+	
+	<!-- 게시물 삭제 쿼리 -->
+	<update id="boardDelete" parameterType="HashMap">
+		UPDATE TB_BOARD 
+		SET 
+			DEL_GB = 'Y' 
+		WHERE
+			IDX = #{IDX}
+	</update>
+</mapper>
