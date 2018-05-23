@@ -6,7 +6,7 @@
 <%@ include file="/WEB-INF/include/include-header.jsp" %>
 </head>
 <body>
-<form id="frm">
+<form id="frm" name="frm" enctype="multipart/form-data">
 <table class="board_view">
 	<colgroup>
 		<col width="15" />
@@ -27,7 +27,15 @@
 		</tr>
 	</tbody>
 </table>
+<div id="fileDiv">
+	<p>
+		<input type="file" id="file" name="file_0">
+		<a href="#" class="btn" id="delete" name="delete"> 삭제</a>
+	</p>
+</div>
+<br><br>
 
+<a href="#" class="btn" id="addFile">파일추가</a>
 <a href="#" class="btn" id="write">작성하기</a>
 <a href="#" class="btn" id="list">목록으로</a>
 
@@ -36,6 +44,8 @@
 <%@ include file="/WEB-INF/include/include-body.jsp" %>
 
 <script>
+var gfv_count = 1;
+
 $(document).ready(function() {
 	$("#list").unbind("click").click(function(e) {
 		e.preventDefault();
@@ -45,6 +55,16 @@ $(document).ready(function() {
 	$("#write").unbind("click").click(function(e) {
 		e.preventDefault();
 		fn_insertBoard();
+	});
+	
+	$("#addFile").unbind("click").click(function(e) {
+		e.preventDefault();
+		fn_addFile();
+	});
+	
+	$("a[name='delete']").unbind("click").click(function(e) {
+		e.preventDefault();
+		fn_deleteFile($(this));
 	});
 });
 
@@ -62,6 +82,24 @@ function fn_insertBoard() {
 	comSubmit.submit();
 }
 
+// 첨부파일 등록 추가 이벤트 함수
+function fn_addFile() {
+	var str = "<p>"
+		+ "<input type='file' name='file_" + (gfv_count++) + "'>"
+		+ "<a href='#' class='btn' name='delete'>삭제</a>"
+		+ "</p>";
+	
+	$("#fileDiv").append(str);
+	$("a[name='delete']").unbind("click").click(function(e) {
+		e.preventDefault();
+		fn_deleteFile($(this));
+	});
+}
+
+// 첨부파일 삭제 이벤트 함수
+function fn_deleteFile(obj) {
+	obj.parent().remove();
+}
 </script>
 </body>
 </html>

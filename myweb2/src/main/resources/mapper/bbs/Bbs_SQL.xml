@@ -17,7 +17,10 @@
 	</select>
 	
 	<!-- 게시물 등록 쿼리 -->
-	<insert id="insertBoard" parameterType="HashMap">
+	<insert id="insertBoard" parameterType="HashMap" useGeneratedKeys="true" keyProperty="IDX">
+		<selectKey keyProperty="IDX" resultType="String" order="BEFORE">
+			SELECT SEQ_TB_BOARD_IDX.NEXTVAL FROM DUAL
+		</selectKey>
 		INSERT INTO TB_BOARD 
 		(
 			IDX, 
@@ -30,12 +33,34 @@
 		)
 		VALUES
 		(
-			SEQ_TB_BOARD_IDX.NEXTVAl, 
+			#{IDX},  
 			#{TITLE}, 
 			#{CONTENTS}, 
 			0, 
 			'N', 
 			SYSDATE, 
+			'Admin'
+		)
+	</insert>
+	
+	<!-- 게시물 첨부파일 정보 등록 쿼리 -->
+	<insert id="insertFile" parameterType="HashMap">
+		INSERT INTO TB_FILE 
+		(
+			IDX, 
+			BOARD_IDX, 
+			ORIGINAL_FILE_NAME, 
+			STORED_FILE_NAME, 
+			FILE_SIZE, 
+			CREA_ID
+		)
+		VALUES
+		(
+			SEQ_TB_FILE_IDX.NEXTVAL, 
+			#{BOARD_IDX}, 
+			#{ORIGINAL_FILE_NAME}, 
+			#{STORED_FILE_NAME}, 
+			#{FILE_SIZE}, 
 			'Admin'
 		)
 	</insert>
@@ -64,6 +89,19 @@
 			IDX = #{IDX}
 	</select>
 	
+	<!-- 첨부파일 목록보기 쿼리 -->
+	<select id="selectFileList" parameterType="HashMap" resultType="HashMap">
+		SELECT 
+			IDX, 
+			ORIGINAL_FILE_NAME, 
+			ROUND(FILE_SIZE/1024,1) AS FILE_SIZE 
+		FROM 
+			TB_FILE 
+		WHERE 
+			BOARD_IDX = #{IDX} 
+			AND DEL_GB = 'N'
+	</select>
+	
 	<!-- 게시물 수정 쿼리 -->
 	<update id="boardUpdate" parameterType="HashMap">
 		UPDATE TB_BOARD 
@@ -73,6 +111,25 @@
 		WHERE 
 			IDX = #{IDX}
 	</update>
+	
+	<!-- 첨부파일 삭제 쿼리 -->
+	<update id="deleteFileList" parameterType="HashMap">
+		UPDATE TB_FILE 
+		SET 
+			DEL_GB = 'Y' 
+		WHERE 
+			BOARD_IDX = #{IDX}
+	</update>
+	
+	<!-- 첨부파일 업데이트 쿼리 -->
+	<update id="updateFile" parameterType="HashMap">
+		UPDATE TB_FIlE 
+		SET 
+			DEL_GB = 'N' 
+		WHERE 
+			IDX = #{FILE_IDX}
+	</update>
+	
 	
 	<!-- 게시물 삭제 쿼리 -->
 	<update id="boardDelete" parameterType="HashMap">

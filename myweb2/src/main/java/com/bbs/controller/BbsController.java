@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
@@ -40,8 +41,8 @@ public class BbsController {
 	
 	// 게시물 등록 메소드
 	@RequestMapping(value="/bbs/insertBoard.do")
-	public ModelAndView insertBoard(CommandMap commandMap) throws Exception {
-		bbsService.insertBoard(commandMap.getMap());
+	public ModelAndView insertBoard(CommandMap commandMap, HttpServletRequest request) throws Exception {
+		bbsService.insertBoard(commandMap.getMap(), request);
 		
 		ModelAndView mav = new ModelAndView("redirect:/bbs/openBoardList.do");
 		return mav;
@@ -53,7 +54,8 @@ public class BbsController {
 		Map<String, Object> map = bbsService.selectBoardDetail(commandMap.getMap());
 		
 		ModelAndView mav = new ModelAndView("/bbs/boardDetail");
-		mav.addObject("map", map);
+		mav.addObject("map", map.get("map"));
+		mav.addObject("list", map.get("list"));
 		
 		return mav;
 	}
@@ -64,15 +66,16 @@ public class BbsController {
 		Map<String, Object> map = bbsService.selectBoardDetail(commandMap.getMap());
 		
 		ModelAndView mav = new ModelAndView("/bbs/boardUpdate");
-		mav.addObject("map", map);
+		mav.addObject("map", map.get("map"));
+		mav.addObject("list", map.get("list"));
 		
 		return mav;
 	}
 	
 	// 게시물 수정 메소드
 	@RequestMapping(value="/bbs/boardUpdate.do")
-	public ModelAndView boardUpdate(CommandMap commandMap) throws Exception {
-		bbsService.boardUpdate(commandMap.getMap());
+	public ModelAndView boardUpdate(CommandMap commandMap, HttpServletRequest request) throws Exception {
+		bbsService.boardUpdate(commandMap.getMap(), request);
 		
 		ModelAndView mav = new ModelAndView("redirect:/bbs/openBoardDetail.do");
 		mav.addObject("IDX", commandMap.get("IDX"));

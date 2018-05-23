@@ -6,7 +6,7 @@
 <%@ include file="/WEB-INF/include/include-header.jsp" %>
 </head>
 <body>
-<form id="frm">
+<form id="frm" name="frm" enctype="multipart/form-data">
 <table>
 	<colgroup>
 		<col width="15%" />
@@ -42,10 +42,29 @@
 				<textarea rows="20" cols="100" title="내용" id="CONTENTS" name="CONTENTS"><c:out value="${map.CONTENTS }" /></textarea>
 			</td>
 		</tr>
+		<tr>
+			<th scope="row">첨부파일</th>
+			<td colspan="3">
+				<div id="fileDiv">
+					<c:forEach var="row" items="${list }" varStatus="var">
+						<p>
+							<input type="hidden" id="IDX" name="IDX_${var.index }" value="${row.IDX }" />
+							<a href="#" id="name_${var.index }" name="name_${var.index }">
+								<c:out value="${row.ORIGINAL_FILE_NAME }" />
+							</a>
+							<input type="file" id="file_${var.index }" name="file_${var.index }" />
+							${row.FILE_SIZE }
+							<a href="#" class="btn" id="delete_${var.index }" name="delete_${var.index }">삭제</a>
+						</p>
+					</c:forEach>
+				</div>
+			</td>
+		</tr>
 	</tbody>
 </table>
 </form>
 
+<a href="#" class="btn" id="addFile">파일추가</a>
 <a href="#" class="btn" id="list">목록으로</a>
 <a href="#" class="btn" id="update">저장하기</a>
 <a href="#" class="btn" id="delete">삭제하기</a>
@@ -53,6 +72,8 @@
 <%@ include file="/WEB-INF/include/include-body.jsp" %>
 
 <script>
+var gfv_count = "${fn:length(list) + 1 }";
+
 $(document).ready(function() {
 	$("#list").unbind("click").click(function(e) {
 		e.preventDefault();
@@ -67,6 +88,16 @@ $(document).ready(function() {
 	$("#delete").unbind("click").click(function(e) {
 		e.preventDefault();
 		fn_deleteBoard();
+	});
+	
+	$("#addFile").unbind("click").click(function(e) {
+		e.preventDefault();
+		fn_addFile();
+	});
+	
+	$("a[name^='delete']").unbind("click").click(function(e) {
+		e.preventDefault();
+		fn_deleteFile($(this));
 	});
 });
 
@@ -90,6 +121,25 @@ function fn_deleteBoard() {
 	comSubmit.setUrl("<c:url value='/bbs/boardDelete.do' />");
 	comSubmit.addParam("IDX", $("#IDX").val());
 	comSubmit.submit();
+}
+
+// 첨부파일 추가 이벤트 함수
+function fn_addFile() {
+	var str = "<p>"
+			+ "<input type='file' id='file_" + (gfv_count++) + "' name='file_" + (--gfv_count) + "'/>"
+			+ "<a href='#' class='btn' id='delete_" + (gfv_count++) + "' name='delete_" + (--gfv_count) + "'>삭제</a>"
+			+ "</p>";
+	
+	$("#fileDiv").append(str);
+	$("#delete_" + (gfv_count++)).unbind("click").click(function(e) {
+		e.preventDefault();
+		fn_deleteFile($(this));
+	});
+}
+
+// 첨부파일 삭제 이벤트 함수
+function fn_deleteFile(obj) {
+	obj.parent().remove();
 }
 </script>
 </body>
