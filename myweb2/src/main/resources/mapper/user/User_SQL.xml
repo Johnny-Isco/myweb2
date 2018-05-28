@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="user">
+	<!-- 회원 아이디 중복체크 쿼리 -->
+	<select id="selectUserID" parameterType="HashMap" resultType="HashMap">
+		SELECT 
+			COUNT(ID) AS RESULT 
+		FROM 
+			USER_INFO 
+		WHERE 
+			ID = #{ID}
+	</select>
+	
+	<!-- 회원가입 쿼리 -->
+	<insert id="insertUserData" parameterType="HashMap">
+		INSERT INTO USER_INFO 
+		(
+			NO, 
+			NAME, 
+			TEL, 
+			ID, 
+			PASSWORD
+		)
+		VALUES
+		(
+			SEQ_USER_INFO_IDX.NEXTVAL, 
+			#{NAME}, 
+			#{TEL}, 
+			#{ID}, 
+			#{PASSWORD}
+		)
+	</insert>
+</mapper>
