@@ -36,4 +36,20 @@
 		</interceptor>
 	</interceptors>
 	
+	<!-- 
+		로그인 세션 인터셉터 
+		이벤트가 발생 시 UserInterceptor 클래스를 통해 세션을 체크한다.
+		세션을 체크하여 세션이 존재할 경우에만 기능을 수행한다.
+	-->
+	<interceptors>
+		<interceptor>
+			<mapping path="/bbs/openBoardWrite.do"/>
+			<mapping path="/bbs/insertBoard.do"/>
+			<mapping path="/bbs/openBoardUpdate.do"/>
+			<mapping path="/bbs/updateBoard.do"/>
+			<mapping path="/bbs/deleteBoard.do"/>
+			<beans:bean class="com.user.interceptor.UserInterceptor" />
+		</interceptor>
+	</interceptors>
+	
 </beans:beans>
