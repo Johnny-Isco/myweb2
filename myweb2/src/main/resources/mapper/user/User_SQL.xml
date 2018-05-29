@@ -30,4 +30,16 @@
 			#{PASSWORD}
 		)
 	</insert>
+	
+	<!-- 로그인 쿼리 -->
+	<select id="selectUserInfo" parameterType="HashMap" resultType="HashMap">
+		SELECT 
+			NO, 
+			NAME, 
+			TEL, 
+			ID 
+		FROM USER_INFO 
+		WHERE 
+			ID LIKE #{ID}
+	</select>
 </mapper>

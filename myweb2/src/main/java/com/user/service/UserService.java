@@ -10,4 +10,7 @@ public interface UserService {
 	// 회원가입 서비스 호출
 	void insertUserData(Map<String, Object> map) throws Exception;
 
+	// 로그인 서비스 호출
+	Map<String, Object> selectUserInfo(Map<String, Object> map) throws Exception;
+
 }

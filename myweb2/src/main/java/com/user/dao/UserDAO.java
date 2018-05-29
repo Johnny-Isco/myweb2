@@ -21,5 +21,9 @@ public class UserDAO extends AbstractDAO {
 		insert("user.insertUserData", map);
 	}
 
-	
+	// 로그인 쿼리 호출
+	@SuppressWarnings("unchecked")
+	public Map<String, Object> selectUserInfo(Map<String, Object> map) {
+		return (Map<String, Object>)selectOne("user.selectUserInfo", map);
+	}
 }

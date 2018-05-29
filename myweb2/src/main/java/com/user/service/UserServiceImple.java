@@ -25,4 +25,10 @@ public class UserServiceImple implements UserService {
 	public void insertUserData(Map<String, Object> map) throws Exception {
 		userDAO.insertUserData(map);
 	}
+	
+	// 로그인 로직 호출
+	@Override
+	public Map<String, Object> selectUserInfo(Map<String, Object> map) throws Exception {
+		return userDAO.selectUserInfo(map);
+	}
 }

@@ -92,7 +92,7 @@ function fn_userIDCheck() {
 	{
 		$.ajax({
 			type	: "POST",
-			url		: "../user/checkUserID.do",
+			url		: "/user/checkUserID.do",
 			data	: userData,
 			dataType: "json",
 			success	: function(result) {
@@ -157,7 +157,7 @@ function fn_signUp() {
 				dataType: "json",
 				success	: function(result) {
 					alert(result.msg);
-					window.location.href="../home/openHome.do";
+					window.location.href="/home/openHome.do";
 				},
 				error	: function(request, status, error) {
 					alert("서버가 응답하지 않습니다." + "\n" + "다시 시도해주시기 바랍니다." + "\n" 
@@ -174,7 +174,7 @@ function fn_signUp() {
 function fn_cancel() {
 	if(window.confirm("메인 화면으로 돌아가시겠습니까?"))
 	{
-		window.location.href="../home/openHome.do";
+		window.location.href="/home/openHome.do";
 	}
 }
 </script>
