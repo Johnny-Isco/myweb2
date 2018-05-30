@@ -25,7 +25,7 @@
 	<input type="text" name="searchWord" id="searchWord" value="${map.searchWord }" placeholder="검색어를 입력해주세요.">
 	<a href="#" class="btn" id="searchBtn">검색</a>
 </p>
-<table style="board_list">
+<table class="board_list">
     <colgroup>
         <col width="10%"/>
         <col width="*"/>
@@ -46,7 +46,7 @@
                 <c:forEach items="${map.list }" var="row">
                     <tr>
                         <td>${row.IDX }</td>
-                        <td>
+                        <td style="text-align: left;">
                         	<a href="javascript:fn_openBoardDetail('${row.IDX }', '${map.paging.curPage }', '${map.saerchType }', '${map.searchWord }')" name="title"><c:out value="${row.TITLE }" /></a>
                         	<input type="hidden" id="IDX" name="IDX" value="${row.IDX }" />
                         </td>

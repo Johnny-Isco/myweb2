@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.bbs.page.BbsPaging;
@@ -129,4 +130,20 @@ public class BbsController {
 		return mav;
 	}
 	
+	// 댓글 목록 메소드
+	@RequestMapping(value="/bbs/viewComment.do")
+	@ResponseBody
+	public List<Map<String, Object>> viewComment(CommandMap commandMap) throws Exception {
+		List<Map<String, Object>> list = bbsService.selectCommentList(commandMap.getMap());
+		
+		return list;
+	}
+	
+	// 댓글 등록 메소드
+	@RequestMapping(value="/bbs/insertComment.do")
+	@ResponseBody
+	public void insertComment(CommandMap commandMap) throws Exception {
+		
+		bbsService.insertComment(commandMap.getMap());
+	}
 }

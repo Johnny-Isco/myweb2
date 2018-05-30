@@ -110,4 +110,16 @@ public class BbsServiceImple implements BbsService {
 		
 		bbsDAO.boardDelete(map);
 	}
+	
+	// 댓글 목록 로직 호출
+	@Override
+	public List<Map<String, Object>> selectCommentList(Map<String, Object> map) throws Exception {
+		return bbsDAO.selectCommentList(map);
+	}
+	
+	// 댓글 등록 로직 호출
+	@Override
+	public void insertComment(Map<String, Object> map) throws Exception {
+		bbsDAO.insertComment(map);
+	}
 }

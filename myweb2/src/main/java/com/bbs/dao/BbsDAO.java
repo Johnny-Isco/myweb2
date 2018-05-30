@@ -87,4 +87,15 @@ public class BbsDAO extends AbstractDAO {
 	public void boardDelete(Map<String, Object> map) throws Exception {
 		update("bbs.boardDelete", map);
 	}
+
+	// 댓글 목록 쿼리 호출
+	@SuppressWarnings("unchecked")
+	public List<Map<String, Object>> selectCommentList(Map<String, Object> map) {
+		return (List<Map<String, Object>>)selectList("bbs.selectCommentList", map);
+	}
+
+	// 댓글 등록 쿼리 호출
+	public void insertComment(Map<String, Object> map) {
+		insert("bbs.insertComment", map);
+	}
 }

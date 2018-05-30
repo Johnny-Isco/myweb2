@@ -53,6 +53,38 @@
 
 <a href="#" class="btn" id="list">목록으로</a>
 <a href="#" class="btn" id="update">수정하기</a>
+<br>
+
+<table class="board_view" id="comment_table">
+	<caption>댓글</caption>
+	<colgroup>
+		<col width="15%" />
+		<col width="10%" />
+		<col width="20%" />
+		<col width="50%" />
+	</colgroup>
+	<thead>
+		<tr>
+			<th>댓글번호</th>
+			<th>게시글 아이디</th>
+			<th>사용자 아이디</th>
+			<th>댓글내용</th>
+		</tr>
+	</thead>
+	<tbody id="reply_list">
+	
+	</tbody>
+</table>
+<br>
+
+<div style="width: 660px;">
+	<p>
+		<textarea rows="10" cols="90" name="DESCRIPTION" id="DESCRIPTION"></textarea>
+	</p>
+	<p style="text-align: right;">
+		<a href="#" class="btn" id="commentBtn">등록</a>
+	</p>
+</div>
 
 <%@ include file="/WEB-INF/include/include-body.jsp" %>
 
@@ -72,6 +104,16 @@ $(document).ready(function(e) {
 		e.preventDefault();
 		fn_downloadFile($(this));
 	});
+	
+	$("#commentBtn").unbind("click").click(function(e) {
+		e.preventDefault();
+		fn_insertComment();
+	})
+	
+	if($("#reply_list").children().length < 1)
+	{
+		fn_viewComment();
+	}
 });
 
 // 게시물 목록 이동 함수
@@ -122,6 +164,72 @@ function fn_downloadFile(obj) {
 	{
 	 formCount.children().remove();
 	}
+}
+
+// 댓글 작성 함수
+function fn_insertComment() {
+	if("${loginInfo.ID}".length < 1)
+	{
+		alert("로그인 후 이용해주세요.");
+	}
+	else if($("#DESCRIPTION").val().length < 1)
+	{
+		alert("댓글을 작성하고 시도해주세요.");
+	}
+	else
+	{
+		$.ajax({
+			type	: "POST", 
+			url		: "/bbs/insertComment.do",
+			data	: {
+				IDX			: "${map.IDX}",
+				USER_ID		: "${loginInfo.ID}",
+				DESCRIPTION	: $("#DESCRIPTION").val()
+			},
+			error	: function(request, status, error) {
+				alert("서버가 응답하지 않습니다." + "\n" + "다시 시도해주시기 바랍니다." + "\n" 
+						+ "code: " + request.status + "\n" 
+						+ "message : " + request.responseText + "\n" 
+						+ "error: " + error);
+			},
+			success	: function(result) {
+				$("#DESCRIPTION").val("");
+				fn_viewComment();
+			}
+		});
+	}
+}
+
+// 댓글 리스트 함수
+function fn_viewComment() {
+	$.ajax({
+		type	: "POST",
+		url		: "/bbs/viewComment.do",
+		dataType: "json",
+		data	: {
+			IDX	: "${map.IDX}"
+		},
+		error	: function(request, status, error) {
+			alert("서버가 응답하지 않습니다." + "\n" + "다시 시도해주시기 바랍니다." + "\n" 
+					+ "code: " + request.status + "\n" 
+					+ "message : " + request.responseText + "\n" 
+					+ "error: " + error);
+		},
+		success	: function(result) {
+			$("#reply_list").children().remove();
+			
+			$(result).each(function(i) {
+				var str ="<tr>" 
+					+ "<td>" + result[i].REPLY_ID + "</td>" 
+					+ "<td>" + result[i].ARTICLE_ID + "</td>" 
+					+ "<td>" + result[i].USER_ID + "</td>" 
+					+ "<td>" + result[i].DESCRIPTION + "</td>" 
+					+ "</tr>";
+					
+				$("#reply_list").append(str);	
+			});
+		}
+	});
 }
 </script>
 </body>

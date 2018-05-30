@@ -192,4 +192,39 @@
 		WHERE
 			IDX = #{IDX}
 	</update>
+	
+	<!-- 댓글 목록 쿼리 -->
+	<select id="selectCommentList" parameterType="HashMap" resultType="HashMap">
+		SELECT 
+			REPLY_ID, 
+			ARTICLE_ID, 
+			USER_ID, 
+			DESCRIPTION, 
+			TO_DATE(COMMENT_DATE, 'YYYY-MM-DD') 
+		FROM 
+			BBS_COMMENT 
+		WHERE 
+			ARTICLE_ID = #{IDX} 
+		ORDER BY REPLY_ID DESC
+	</select>
+	
+	<!-- 댓글 등록 쿼리 -->
+	<insert id="insertComment" parameterType="HashMap">
+		INSERT INTO BBS_COMMENT 
+		(
+			REPLY_ID, 
+			ARTICLE_ID, 
+			USER_ID, 
+			DESCRIPTION, 
+			COMMENT_DATE
+		)
+		VALUES
+		(
+			BBS_COMMENT_SEQ.NEXTVAL, 
+			#{IDX}, 
+			#{USER_ID}, 
+			#{DESCRIPTION}, 
+			SYSDATE
+		)
+	</insert>
 </mapper>
