@@ -10,10 +10,20 @@ import com.common.dao.AbstractDAO;
 @Repository("bbsDAO")
 public class BbsDAO extends AbstractDAO {
 
+	// 전체 게시물의 레코드 갯수 구하는 쿼리 호출
+	@SuppressWarnings("unchecked")
+	public int boardListGetCount() throws Exception {
+		Map<String, Object> map = (Map<String, Object>)selectOne("bbs.boardListGetCount");
+		int idx = Integer.parseInt(map.get("COUNT(IDX)").toString());
+		return idx;
+	}
+	
 	// 게시물 목록 조회 쿼리 호출
 	@SuppressWarnings("unchecked")
-	public List<Map<String, Object>> selectBoardList(Map<String, Object> commandMap) throws Exception {
-		return (List<Map<String, Object>>)selectList("bbs.selectBoardList", commandMap);
+	public List<Map<String, Object>> selectBoardList(Map<String, Object> map, int start, int end) throws Exception {
+		map.put("START", start);
+		map.put("END", end);
+		return (List<Map<String, Object>>)selectList("bbs.selectBoardList", map);
 	}
 
 	// 게시물 등록 쿼리 호출

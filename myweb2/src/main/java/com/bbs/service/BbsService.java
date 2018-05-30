@@ -7,8 +7,11 @@ import javax.servlet.http.HttpServletRequest;
 
 public interface BbsService {
 
+	// 전체 게시물의 레코드 갯수를 구하는 서비스 호출
+	int boardListGetCount() throws Exception;
+		
 	// 게시물 목록 서비스 호출
-	List<Map<String, Object>> selectBoardList(Map<String, Object> map) throws Exception;
+	List<Map<String, Object>> selectBoardList(Map<String, Object> map, int start, int end) throws Exception;
 
 	// 게시물 등록 서비스 호출
 	void insertBoard(Map<String, Object> map, HttpServletRequest request) throws Exception;

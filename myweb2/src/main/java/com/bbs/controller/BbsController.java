@@ -1,5 +1,6 @@
 package com.bbs.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -9,8 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.bbs.page.BbsPaging;
 import com.bbs.service.BbsService;
 import com.company.common.CommandMap;
 
@@ -24,10 +27,26 @@ public class BbsController {
 	
 	// 게시물 목록 이동 메소드
 	@RequestMapping(value="/bbs/openBoardList.do")
-	public ModelAndView openBoardList(CommandMap commandMap) throws Exception {
-		List<Map<String, Object>> list = bbsService.selectBoardList(commandMap.getMap());
+	public ModelAndView openBoardList(CommandMap commandMap,
+			@RequestParam(value="curPage", defaultValue="1") int curPage) throws Exception {
+		
+		// 전체 게시물 레코드의 갯수
+		int count = bbsService.boardListGetCount();
+		
+		BbsPaging paging = new BbsPaging(count, curPage);
+		// 현재 페이지 번호
+		int start = paging.getPageBegin();
+		// 현재 페이지의 끝번호
+		int end = paging.getPageEnd();
+		
+		List<Map<String, Object>> list = bbsService.selectBoardList(commandMap.getMap(), start, end);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("list", list);
+		map.put("count", count);
+		map.put("paging", paging);
+		
 		ModelAndView mav = new ModelAndView("/bbs/boardList");
-		mav.addObject("list", list);
+		mav.addObject("map", map);
 		
 		return mav;
 	}
@@ -50,12 +69,14 @@ public class BbsController {
 	
 	// 게시물 상세보기 화면 이동 메소드
 	@RequestMapping(value="/bbs/openBoardDetail.do")
-	public ModelAndView openBoardDetail(CommandMap commandMap) throws Exception {
+	public ModelAndView openBoardDetail(CommandMap commandMap, 
+			@RequestParam(value="curPage", defaultValue="1")int curPage) throws Exception {
 		Map<String, Object> map = bbsService.selectBoardDetail(commandMap.getMap());
 		
 		ModelAndView mav = new ModelAndView("/bbs/boardDetail");
 		mav.addObject("map", map.get("map"));
 		mav.addObject("list", map.get("list"));
+		mav.addObject("curPage", curPage);
 		
 		return mav;
 	}

@@ -8,6 +8,7 @@
 <body>
 <h2>게시판 목록</h2>
 <a href="#" class="btn" id="write1">글쓰기</a>
+<p>${map.count }개의 게시물이 있습니다.</p>
 <table style="board_list">
     <colgroup>
         <col width="10%"/>
@@ -25,12 +26,12 @@
     </thead>
     <tbody>
         <c:choose>
-            <c:when test="${fn:length(list) > 0}">
-                <c:forEach items="${list }" var="row">
+            <c:when test="${fn:length(map.list) > 0}">
+                <c:forEach items="${map.list }" var="row">
                     <tr>
                         <td>${row.IDX }</td>
                         <td>
-                        	<a href="#" name="title"><c:out value="${row.TITLE }" /></a>
+                        	<a href="javascript:fn_openBoardDetail('${row.IDX }', '${map.paging.curPage }')" name="title"><c:out value="${row.TITLE }" /></a>
                         	<input type="hidden" id="IDX" name="IDX" value="${row.IDX }" />
                         </td>
                         <td>${row.HIT_CNT }</td>
@@ -44,6 +45,38 @@
                 </tr>
             </c:otherwise>
         </c:choose>
+        <tr>
+        	<td colspan="4">
+        		<!-- 처음 페이지로 이동 : 현재 페이지가 1보다 크면 [처음]을 출력 -->
+        		<c:if test="${map.paging.curBlock > 1 }">
+        			<a href="javascript:fn_list('1')">[처음]</a>
+        		</c:if>
+        		<!-- 이전 페이지 블록으로 이동 : 현재 페이지 블럭이 1보다 크면 [이전]을 출력 -->
+        		<c:if test="${map.paging.curBlock > 1 }">
+        			<a href="javascript:fn_list('${map.paging.prevPage }')">[이전]</a>
+        		</c:if>
+        		<!-- 하나의 블럭에서 반복문 수행 시작페이지부터 끝페이지까지 -->
+        		<c:forEach var="num" begin="${map.paging.blockBegin }" end="${map.paging.blockEnd }">
+        			<!-- 현재 페이지이면 하이퍼링크 제거 -->
+        			<c:choose>
+        				<c:when test="${num == map.paging.curPage }">
+        					<span style="color: red">${num }</span>&nbsp;
+        				</c:when>
+        				<c:otherwise>
+        					<a href="javascript:fn_list('${num }')">${num }</a>&nbsp;
+        				</c:otherwise>
+        			</c:choose>
+        		</c:forEach>
+        		<!-- 다음 페이지 블록으로 이동 : 현재 페이지 블록이 전체 페이지 블록보다 작거나 같으면 [다음]을 출력 -->
+        		<c:if test="${map.paging.curBlock < map.paging.totalBlock }">
+        			<a href="javascript:fn_list('${map.paging.nextPage }')">[다음]</a>
+        		</c:if>
+        		<!-- 끝 페이지로 이동 : 현재 페이지가 전체 페이지보다 작거나 같으면 [끝]을 출력 -->
+        		<c:if test="${map.paging.curPage <= map.paging.totalPage }">
+        			<a href="javascript:fn_list('${map.paging.totalPage }')">[끝]</a>
+        		</c:if>
+        	</td>
+        </tr>
     </tbody>
 </table>
 
@@ -58,11 +91,6 @@ $(document).ready(function(e) {
 		e.preventDefault();
 		fn_openBoardWrite();
 	});
-	
-	$("a[name='title']").unbind("click").click(function(e) {
-		e.preventDefault();
-		fn_openBoardDetail($(this));
-	});
 });
 
 // 게시물 작성 화면 이동 함수
@@ -73,12 +101,15 @@ function fn_openBoardWrite() {
 }
 
 // 게시물 상세보기 화면 이동 함수
-function fn_openBoardDetail(obj) {
-	var comSubmit = new ComSubmit();
-	comSubmit.setUrl("<c:url value='/bbs/openBoardDetail.do' />");
-	comSubmit.addParam("IDX", obj.parent().find("#IDX").val());
-	comSubmit.submit();
+function fn_openBoardDetail(idx, curPage) {
+	window.location.href="/bbs/openBoardDetail.do?IDX=" + idx + "&curPage=" + curPage;
 }
+
+// 페이징 이동 함수
+function fn_list(page) {
+	window.location.href="/bbs/openBoardList.do?curPage=" + page;
+}
+
 </script>
 </body>
 </html>

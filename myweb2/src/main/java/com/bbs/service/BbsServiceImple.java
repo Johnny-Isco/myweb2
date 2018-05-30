@@ -23,10 +23,16 @@ public class BbsServiceImple implements BbsService {
 	@Resource(name="bbsDAO")
 	private BbsDAO bbsDAO;
 
+	// 전체 게시물의 레코드 갯수 구하는 로직 호출
+	@Override
+	public int boardListGetCount() throws Exception {
+		return bbsDAO.boardListGetCount();
+	}
+	
 	// 게시물 목록 조회 로직 호출
 	@Override
-	public List<Map<String, Object>> selectBoardList(Map<String, Object> map) throws Exception {
-		return bbsDAO.selectBoardList(map);
+	public List<Map<String, Object>> selectBoardList(Map<String, Object> map, int start, int end) throws Exception {
+		return bbsDAO.selectBoardList(map, start, end);
 	}
 	
 	// 게시물 등록 로직 호출

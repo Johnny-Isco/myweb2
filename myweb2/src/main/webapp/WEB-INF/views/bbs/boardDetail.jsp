@@ -76,9 +76,7 @@ $(document).ready(function(e) {
 
 // 게시물 목록 이동 함수
 function fn_openBoardList() {
-	var comSubmit = new ComSubmit();
-	comSubmit.setUrl("<c:url value='/bbs/openBoardList.do' />");
-	comSubmit.submit();
+	window.location.href="/bbs/openBoardList.do?curPage=" + "${curPage}";
 }
 
 // 게시물 수정 화면 이동 함수
