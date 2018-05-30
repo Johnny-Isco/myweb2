@@ -9,6 +9,22 @@
 <h2>게시판 목록</h2>
 <a href="#" class="btn" id="write1">글쓰기</a>
 <p>${map.count }개의 게시물이 있습니다.</p>
+<p>
+	<select name="searchType" id="select_searchType">
+		<c:choose>
+			<c:when test="${map.searchType == 'TITLE' }">
+				<option value="TITLE" selected="selected">제목</option>
+				<option value="NO">글 번호</option>
+			</c:when>
+			<c:otherwise>
+				<option value="TITLE">제목</option>
+				<option value="NO" selected="selected">번호</option>
+			</c:otherwise>
+		</c:choose>
+	</select>
+	<input type="text" name="searchWord" id="searchWord" value="${map.searchWord }" placeholder="검색어를 입력해주세요.">
+	<a href="#" class="btn" id="searchBtn">검색</a>
+</p>
 <table style="board_list">
     <colgroup>
         <col width="10%"/>
@@ -31,7 +47,7 @@
                     <tr>
                         <td>${row.IDX }</td>
                         <td>
-                        	<a href="javascript:fn_openBoardDetail('${row.IDX }', '${map.paging.curPage }')" name="title"><c:out value="${row.TITLE }" /></a>
+                        	<a href="javascript:fn_openBoardDetail('${row.IDX }', '${map.paging.curPage }', '${map.saerchType }', '${map.searchWord }')" name="title"><c:out value="${row.TITLE }" /></a>
                         	<input type="hidden" id="IDX" name="IDX" value="${row.IDX }" />
                         </td>
                         <td>${row.HIT_CNT }</td>
@@ -48,7 +64,7 @@
         <tr>
         	<td colspan="4">
         		<!-- 처음 페이지로 이동 : 현재 페이지가 1보다 크면 [처음]을 출력 -->
-        		<c:if test="${map.paging.curBlock > 1 }">
+        		<c:if test="${map.paging.curPage > 1 }">
         			<a href="javascript:fn_list('1')">[처음]</a>
         		</c:if>
         		<!-- 이전 페이지 블록으로 이동 : 현재 페이지 블럭이 1보다 크면 [이전]을 출력 -->
@@ -68,11 +84,11 @@
         			</c:choose>
         		</c:forEach>
         		<!-- 다음 페이지 블록으로 이동 : 현재 페이지 블록이 전체 페이지 블록보다 작거나 같으면 [다음]을 출력 -->
-        		<c:if test="${map.paging.curBlock < map.paging.totalBlock }">
+        		<c:if test="${map.paging.curBlock <= map.paging.totalBlock }">
         			<a href="javascript:fn_list('${map.paging.nextPage }')">[다음]</a>
         		</c:if>
-        		<!-- 끝 페이지로 이동 : 현재 페이지가 전체 페이지보다 작거나 같으면 [끝]을 출력 -->
-        		<c:if test="${map.paging.curPage <= map.paging.totalPage }">
+        		<!-- 끝 페이지로 이동 : 현재 페이지가 전체 페이지보다 작으면 [끝]을 출력 -->
+        		<c:if test="${map.paging.curPage < map.paging.totalPage }">
         			<a href="javascript:fn_list('${map.paging.totalPage }')">[끝]</a>
         		</c:if>
         	</td>
@@ -91,6 +107,11 @@ $(document).ready(function(e) {
 		e.preventDefault();
 		fn_openBoardWrite();
 	});
+	
+	$("#searchBtn").unbind("click").click(function(e) {
+		e.preventDefault();
+		fn_searchList();
+	});
 });
 
 // 게시물 작성 화면 이동 함수
@@ -101,13 +122,32 @@ function fn_openBoardWrite() {
 }
 
 // 게시물 상세보기 화면 이동 함수
-function fn_openBoardDetail(idx, curPage) {
-	window.location.href="/bbs/openBoardDetail.do?IDX=" + idx + "&curPage=" + curPage;
+function fn_openBoardDetail(idx, curPage, searchType, searchWord) {
+	window.location.href="/bbs/openBoardDetail.do?IDX=" + idx 
+			+ "&curPage=" + curPage 
+			+ "&searchType=" + searchType 
+			+ "&searchWord=" + searchWord;
 }
 
 // 페이징 이동 함수
 function fn_list(page) {
-	window.location.href="/bbs/openBoardList.do?curPage=" + page;
+	var searchType = $("#select_searchType option:selected").val();
+	var searchWord = $("#searchWord").val();
+	
+	window.location.href="/bbs/openBoardList.do?curPage=" + page 
+			+ "&searchType=" + searchType 
+			+ "&searchWord=" + searchWord;
+}
+
+// 검색 함수
+function fn_searchList() {
+	var searchType = $("#select_searchType option:selected").val();
+	var searchWord = $("#searchWord").val();
+	
+	// 검색버튼을 클릭할 때 마다 첫번째 페이지를 보여주기 위해 curPage를 1로 고정한다.
+	window.location.href="/bbs/openBoardList.do?curPage=1"
+			+ "&searchType=" + searchType 
+			+ "&searchWord=" + searchWord;
 }
 
 </script>

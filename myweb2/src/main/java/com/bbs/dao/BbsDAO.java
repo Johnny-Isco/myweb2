@@ -1,5 +1,6 @@
 package com.bbs.dao;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -12,17 +13,31 @@ public class BbsDAO extends AbstractDAO {
 
 	// 전체 게시물의 레코드 갯수 구하는 쿼리 호출
 	@SuppressWarnings("unchecked")
-	public int boardListGetCount() throws Exception {
-		Map<String, Object> map = (Map<String, Object>)selectOne("bbs.boardListGetCount");
+	public int boardListGetCount(String searchType, 
+			String searchWord) throws Exception {
+		
+		Map<String, Object> tempMap = new HashMap<String, Object>();
+		tempMap.put("SEARCH_TYPE", searchType);
+		tempMap.put("SEARCH_WORD", searchWord);
+		
+		Map<String, Object> map = (Map<String, Object>)selectOne("bbs.boardListGetCount", tempMap);
 		int idx = Integer.parseInt(map.get("COUNT(IDX)").toString());
 		return idx;
 	}
 	
 	// 게시물 목록 조회 쿼리 호출
 	@SuppressWarnings("unchecked")
-	public List<Map<String, Object>> selectBoardList(Map<String, Object> map, int start, int end) throws Exception {
+	public List<Map<String, Object>> selectBoardList(Map<String, Object> map, 
+			int start, 
+			int end, 
+			String searchType, 
+			String searchWord) throws Exception {
+		
 		map.put("START", start);
 		map.put("END", end);
+		map.put("SEARCH_TYPE", searchType);
+		map.put("SEARCH_WORD", searchWord);
+		
 		return (List<Map<String, Object>>)selectList("bbs.selectBoardList", map);
 	}
 

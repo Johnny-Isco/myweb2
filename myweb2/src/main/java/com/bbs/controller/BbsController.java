@@ -28,10 +28,12 @@ public class BbsController {
 	// 게시물 목록 이동 메소드
 	@RequestMapping(value="/bbs/openBoardList.do")
 	public ModelAndView openBoardList(CommandMap commandMap,
-			@RequestParam(value="curPage", defaultValue="1") int curPage) throws Exception {
+			@RequestParam(value="curPage", defaultValue="1") int curPage, 
+			@RequestParam(value="searchType", defaultValue="TITLE")String searchType, 
+			@RequestParam(value="searchWord", defaultValue="")String searchWord) throws Exception {
 		
 		// 전체 게시물 레코드의 갯수
-		int count = bbsService.boardListGetCount();
+		int count = bbsService.boardListGetCount(searchType, searchWord);
 		
 		BbsPaging paging = new BbsPaging(count, curPage);
 		// 현재 페이지 번호
@@ -39,10 +41,12 @@ public class BbsController {
 		// 현재 페이지의 끝번호
 		int end = paging.getPageEnd();
 		
-		List<Map<String, Object>> list = bbsService.selectBoardList(commandMap.getMap(), start, end);
+		List<Map<String, Object>> list = bbsService.selectBoardList(commandMap.getMap(), start, end, searchType, searchWord);
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("list", list);
 		map.put("count", count);
+		map.put("searchType", searchType);
+		map.put("searchWord", searchWord);
 		map.put("paging", paging);
 		
 		ModelAndView mav = new ModelAndView("/bbs/boardList");
@@ -54,13 +58,16 @@ public class BbsController {
 	// 게시물 등록 화면 이동 메소드
 	@RequestMapping(value="/bbs/openBoardWrite.do")
 	public ModelAndView openBoardWrite(CommandMap commandMap) throws Exception {
+		
 		ModelAndView mav = new ModelAndView("/bbs/boardWrite");
 		return mav;
 	}
 	
 	// 게시물 등록 메소드
 	@RequestMapping(value="/bbs/insertBoard.do")
-	public ModelAndView insertBoard(CommandMap commandMap, HttpServletRequest request) throws Exception {
+	public ModelAndView insertBoard(CommandMap commandMap, 
+			HttpServletRequest request) throws Exception {
+		
 		bbsService.insertBoard(commandMap.getMap(), request);
 		
 		ModelAndView mav = new ModelAndView("redirect:/bbs/openBoardList.do");
@@ -70,13 +77,18 @@ public class BbsController {
 	// 게시물 상세보기 화면 이동 메소드
 	@RequestMapping(value="/bbs/openBoardDetail.do")
 	public ModelAndView openBoardDetail(CommandMap commandMap, 
-			@RequestParam(value="curPage", defaultValue="1")int curPage) throws Exception {
+			@RequestParam(value="curPage", defaultValue="1")int curPage, 
+			@RequestParam(value="searchType", defaultValue="TITLE")String searchType, 
+			@RequestParam(value="searchWord", defaultValue="")String searchWord) throws Exception {
+		
 		Map<String, Object> map = bbsService.selectBoardDetail(commandMap.getMap());
 		
 		ModelAndView mav = new ModelAndView("/bbs/boardDetail");
 		mav.addObject("map", map.get("map"));
 		mav.addObject("list", map.get("list"));
 		mav.addObject("curPage", curPage);
+		mav.addObject("searchType", searchType);
+		mav.addObject("searchWord", searchWord);
 		
 		return mav;
 	}
@@ -84,6 +96,7 @@ public class BbsController {
 	// 게시물 수정 화면 이동 메소드
 	@RequestMapping(value="/bbs/openBoardUpdate.do")
 	public ModelAndView openBoardUpdate(CommandMap commandMap) throws Exception {
+		
 		Map<String, Object> map = bbsService.selectBoardDetail(commandMap.getMap());
 		
 		ModelAndView mav = new ModelAndView("/bbs/boardUpdate");
@@ -95,7 +108,9 @@ public class BbsController {
 	
 	// 게시물 수정 메소드
 	@RequestMapping(value="/bbs/boardUpdate.do")
-	public ModelAndView boardUpdate(CommandMap commandMap, HttpServletRequest request) throws Exception {
+	public ModelAndView boardUpdate(CommandMap commandMap, 
+			HttpServletRequest request) throws Exception {
+		
 		bbsService.boardUpdate(commandMap.getMap(), request);
 		
 		ModelAndView mav = new ModelAndView("redirect:/bbs/openBoardDetail.do");
@@ -107,6 +122,7 @@ public class BbsController {
 	// 게시물 삭제 메소드
 	@RequestMapping(value="/bbs/boardDelete.do")
 	public ModelAndView boardDelete(CommandMap commandMap) throws Exception {
+		
 		bbsService.boardDelete(commandMap.getMap());
 		
 		ModelAndView mav = new ModelAndView("redirect:/bbs/openBoardList.do");

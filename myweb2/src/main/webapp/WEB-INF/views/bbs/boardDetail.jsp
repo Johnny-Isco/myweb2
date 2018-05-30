@@ -76,7 +76,9 @@ $(document).ready(function(e) {
 
 // 게시물 목록 이동 함수
 function fn_openBoardList() {
-	window.location.href="/bbs/openBoardList.do?curPage=" + "${curPage}";
+	window.location.href="/bbs/openBoardList.do?curPage=" + "${curPage}" 
+			+ "&searchType=" + "${searchType}" 
+			+ "&searchWord=" + "${searchWord}";
 }
 
 // 게시물 수정 화면 이동 함수

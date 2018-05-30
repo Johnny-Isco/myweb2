@@ -25,19 +25,28 @@ public class BbsServiceImple implements BbsService {
 
 	// 전체 게시물의 레코드 갯수 구하는 로직 호출
 	@Override
-	public int boardListGetCount() throws Exception {
-		return bbsDAO.boardListGetCount();
+	public int boardListGetCount(String searchType, 
+			String searchWord) throws Exception {
+		
+		return bbsDAO.boardListGetCount(searchType, searchWord);
 	}
 	
 	// 게시물 목록 조회 로직 호출
 	@Override
-	public List<Map<String, Object>> selectBoardList(Map<String, Object> map, int start, int end) throws Exception {
-		return bbsDAO.selectBoardList(map, start, end);
+	public List<Map<String, Object>> selectBoardList(Map<String, Object> map, 
+			int start, 
+			int end, 
+			String searchType, 
+			String searchWord) throws Exception {
+		
+		return bbsDAO.selectBoardList(map, start, end, searchType, searchWord);
 	}
 	
 	// 게시물 등록 로직 호출
 	@Override
-	public void insertBoard(Map<String, Object> map, HttpServletRequest request) throws Exception {
+	public void insertBoard(Map<String, Object> map, 
+			HttpServletRequest request) throws Exception {
+		
 		bbsDAO.insertBoard(map);
 		
 		List<Map<String, Object>> list = fileUtils.parseInsertFileInfo(map, request);
@@ -50,6 +59,7 @@ public class BbsServiceImple implements BbsService {
 	// 게시물 상세보기 로직 호출
 	@Override
 	public Map<String, Object> selectBoardDetail(Map<String, Object> map) throws Exception {
+		
 		// 게시물 조회 시 조회 카운트 증가
 		bbsDAO.updateHitCnt(map);
 		
@@ -65,7 +75,9 @@ public class BbsServiceImple implements BbsService {
 	
 	// 게시물 수정 로직 호출
 	@Override
-	public void boardUpdate(Map<String, Object> map, HttpServletRequest request) throws Exception {
+	public void boardUpdate(Map<String, Object> map, 
+			HttpServletRequest request) throws Exception {
+		
 		bbsDAO.boardUpdate(map);
 		
 		bbsDAO.deleteFileList(map);
@@ -95,6 +107,7 @@ public class BbsServiceImple implements BbsService {
 	// 게시물 삭제 로직 호출
 	@Override
 	public void boardDelete(Map<String, Object> map) throws Exception {
+		
 		bbsDAO.boardDelete(map);
 	}
 }

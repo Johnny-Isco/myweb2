@@ -8,19 +8,26 @@ import javax.servlet.http.HttpServletRequest;
 public interface BbsService {
 
 	// 전체 게시물의 레코드 갯수를 구하는 서비스 호출
-	int boardListGetCount() throws Exception;
+	int boardListGetCount(String searchType, 
+			String searchWord) throws Exception;
 		
 	// 게시물 목록 서비스 호출
-	List<Map<String, Object>> selectBoardList(Map<String, Object> map, int start, int end) throws Exception;
+	List<Map<String, Object>> selectBoardList(Map<String, Object> map, 
+			int start, 
+			int end,
+			String searchType, 
+			String searchWord) throws Exception;
 
 	// 게시물 등록 서비스 호출
-	void insertBoard(Map<String, Object> map, HttpServletRequest request) throws Exception;
+	void insertBoard(Map<String, Object> map, 
+			HttpServletRequest request) throws Exception;
 
 	// 게시물 상세보기 서비스 호출
 	Map<String, Object> selectBoardDetail(Map<String, Object> map) throws Exception;
 
 	// 게시물 수정 서비스 호출
-	void boardUpdate(Map<String, Object> map, HttpServletRequest request) throws Exception;
+	void boardUpdate(Map<String, Object> map, 
+			HttpServletRequest request) throws Exception;
 
 	// 게시물 삭제 서비스 호출
 	void boardDelete(Map<String, Object> map) throws Exception;
