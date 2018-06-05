@@ -41,4 +41,7 @@ public interface BbsService {
 	// 댓글 등록 서비스 호출
 	void insertComment(Map<String, Object> map) throws Exception;
 
+	// 댓글 삭제 서비스 호출
+	void deleteComment(Map<String, Object> map) throws Exception;
+
 }

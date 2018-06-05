@@ -128,4 +128,10 @@ public class BbsServiceImple implements BbsService {
 	public void insertComment(Map<String, Object> map) throws Exception {
 		bbsDAO.insertComment(map);
 	}
+	
+	// 댓글 삭제 로직 호출
+	@Override
+	public void deleteComment(Map<String, Object> map) throws Exception {
+		bbsDAO.deleteComment(map);
+	}
 }

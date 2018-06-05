@@ -58,10 +58,11 @@
 <table class="board_view" id="comment_table">
 	<caption>댓글</caption>
 	<colgroup>
-		<col width="15%" />
-		<col width="10%" />
-		<col width="20%" />
-		<col width="50%" />
+		<col width="15%">
+		<col width="10%">
+		<col width="20%">
+		<col width="45%">
+		<col width="5%">
 	</colgroup>
 	<thead>
 		<tr>
@@ -69,6 +70,7 @@
 			<th>게시글 아이디</th>
 			<th>사용자 아이디</th>
 			<th>댓글내용</th>
+			<th>삭제</th>
 		</tr>
 	</thead>
 	<tbody id="reply_list">
@@ -143,20 +145,6 @@ function fn_downloadFile(obj) {
 	comSubmit.addParam("IDX", idx);
 	comSubmit.submit();
 	
-	/*
-	$.ajax({
-		type	: "POST",
-		url		: "/common/downloadFile.do",
-		data	: {"IDX": idx},
-		success	: function(result) {
-			alert(result.msg);
-			
-		},
-		error	: function(XHR, textStatus, error) {
-			alert(textStatus + " : " +error);
-		}
-	});
-	*/
 	/*
 	 - 파일 다운로드 후 Form태그의  addParam 태그 삭제
 	 1. 파일 다운로드 후 Form태그의 addParam 태그를 삭제하지 않을 경우 다음 파일을 다운로드 받을 때 
@@ -267,18 +255,46 @@ function fn_viewComment(curPage) {
 			
 			// 댓글 내용
 			$(result.list).each(function(i) {
-				var str ="<tr>" 
+				var str = "<tr>" 
 					+ "<td>" + result.list[i].REPLY_ID + "</td>" 
 					+ "<td>" + result.list[i].ARTICLE_ID + "</td>" 
 					+ "<td>" + result.list[i].USER_ID + "</td>" 
-					+ "<td>" + result.list[i].DESCRIPTION + "</td>" 
+					+ "<td>" + result.list[i].DESCRIPTION + "</td>"
+					+ "<td>" 
+					+ ('${loginInfo.ID}' == result.list[i].USER_ID ? "<a class='btn' href='javascript:fn_commentDelete(" + result.list[i].REPLY_ID + ")'>X</a>" : "") 
+					+ "</td>"
 					+ "</tr>";
-					
+				
 				// 댓글 표기
 				$("#reply_list").append(str);	
 			});
 		}
 	});
+}
+
+// 댓글 삭제 함수
+function fn_commentDelete(id) {
+	if (confirm("댓글을 삭제하시겠습니까?"))
+	{
+		$.ajax({
+			type	: "POST", 
+			url		: "/bbs/deleteComment.do",
+			data	: {
+				"REPLY_ID" : id
+			},
+			error	: function(request, status, error) {
+				alert("서버가 응답하지 않습니다." + "\n" + "다시 시도해주시기 바랍니다." + "\n" 
+						+ "code: " + request.status + "\n" 
+						+ "message : " + request.responseText + "\n" 
+						+ "error: " + error);
+			},
+			success	: function() {
+				alert("댓글이 삭제되었습니다.");
+				// 현재 보고있는 댓글 페이지 번호를 인자로 넘김
+				fn_viewComment($("#reply_list").find("span").text());
+			}
+		});
+	}
 }
 </script>
 </body>

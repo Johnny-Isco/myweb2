@@ -259,4 +259,12 @@
 			SYSDATE
 		)
 	</insert>
+	
+	<!-- 댓글 삭제 쿼리 -->
+	<delete id="deleteComment" parameterType="HashMap">
+		DELETE 
+		FROM BBS_COMMENT 
+		WHERE 
+			REPLY_ID = #{REPLY_ID}
+	</delete>
 </mapper>

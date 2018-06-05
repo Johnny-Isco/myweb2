@@ -163,4 +163,12 @@ public class BbsController {
 		
 		bbsService.insertComment(commandMap.getMap());
 	}
+	
+	// 댓글 삭제 메소드
+	@RequestMapping(value="/bbs/deleteComment.do")
+	@ResponseBody
+	public void deleteComment(CommandMap commandMap) throws Exception {
+		
+		bbsService.deleteComment(commandMap.getMap());
+	}
 }
