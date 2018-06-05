@@ -90,10 +90,18 @@ public class BbsDAO extends AbstractDAO {
 
 	// 댓글 목록 쿼리 호출
 	@SuppressWarnings("unchecked")
-	public List<Map<String, Object>> selectCommentList(Map<String, Object> map) {
+	public List<Map<String, Object>> selectCommentList(Map<String, Object> map, int start, int end) {
+		map.put("START", start);
+		map.put("END", end);
+		
 		return (List<Map<String, Object>>)selectList("bbs.selectCommentList", map);
 	}
 
+	// 전체 댓글의 레코드 갯수를 구하는 쿼리 호출
+	public int commentListGetCount(Map<String, Object> map) {
+		return Integer.parseInt(selectOne("bbs.commentListGetCount", map).toString());
+	}
+	
 	// 댓글 등록 쿼리 호출
 	public void insertComment(Map<String, Object> map) {
 		insert("bbs.insertComment", map);

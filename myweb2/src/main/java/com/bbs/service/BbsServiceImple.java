@@ -113,8 +113,14 @@ public class BbsServiceImple implements BbsService {
 	
 	// 댓글 목록 로직 호출
 	@Override
-	public List<Map<String, Object>> selectCommentList(Map<String, Object> map) throws Exception {
-		return bbsDAO.selectCommentList(map);
+	public List<Map<String, Object>> selectCommentList(Map<String, Object> map, int start, int end) throws Exception {
+		return bbsDAO.selectCommentList(map, start, end);
+	}
+	
+	// 전체 댓글의 레코드 갯수를 구하는 로직 호출
+	@Override
+	public int commentListGetCount(Map<String, Object> map) throws Exception {
+		return bbsDAO.commentListGetCount(map);
 	}
 	
 	// 댓글 등록 로직 호출

@@ -72,7 +72,9 @@
 		</tr>
 	</thead>
 	<tbody id="reply_list">
-	
+		<tr>
+			<td colspan="4" id="td_page" style="text-align: right;"></td>
+		</tr>
 	</tbody>
 </table>
 <br>
@@ -110,9 +112,9 @@ $(document).ready(function(e) {
 		fn_insertComment();
 	})
 	
-	if($("#reply_list").children().length < 1)
+	if($("#reply_list tr").next().length < 1)
 	{
-		fn_viewComment();
+		fn_viewComment(1);
 	}
 });
 
@@ -194,20 +196,22 @@ function fn_insertComment() {
 			},
 			success	: function(result) {
 				$("#DESCRIPTION").val("");
-				fn_viewComment();
+				// 현재 보고있는 댓글 페이지 번호를 인자로 넘김
+				fn_viewComment($("#reply_list").find("span").text());
 			}
 		});
 	}
 }
 
 // 댓글 리스트 함수
-function fn_viewComment() {
+function fn_viewComment(curPage) {
 	$.ajax({
 		type	: "POST",
 		url		: "/bbs/viewComment.do",
 		dataType: "json",
 		data	: {
-			IDX	: "${map.IDX}"
+			IDX		: "${map.IDX}", 
+			curPage	: curPage < 1 ? 1 : curPage
 		},
 		error	: function(request, status, error) {
 			alert("서버가 응답하지 않습니다." + "\n" + "다시 시도해주시기 바랍니다." + "\n" 
@@ -216,16 +220,61 @@ function fn_viewComment() {
 					+ "error: " + error);
 		},
 		success	: function(result) {
-			$("#reply_list").children().remove();
+			// 댓글 카운팅, 페이징, 댓글 전부 삭제
+			$("#comment_table").find("caption").children().remove();
+			$("#td_page").children().remove();
+			$("#reply_list tr").next().remove();
 			
-			$(result).each(function(i) {
+			// 댓글 카운팅 표기
+			$("#comment_table").find("caption").text("댓글 : " + result.count);
+			
+			// 페이징
+			var page = "";
+			if (result.paging.curPage > 1)
+			{
+				page += "<a href='javascript:fn_viewComment(1)'>[처음]</a>";
+			}
+			if (result.paging.curBlock > 1)
+			{
+				page += "<a href='javascript:fn_viewComment(" + result.paging.prevPage + ")'>[이전]</a>";
+			}
+			
+			// 번호 페이징
+			for (var i = result.paging.blockBegin; i <= result.paging.blockEnd; i++)
+			{
+				if (i == result.paging.curPage)
+				{
+					page += "<span style='color: red'>" + i + "</span>";
+				}
+				else
+				{
+					page += "<a href='javascript:fn_viewComment(" + i + ")'>" + i + "</a>";
+				}
+			}
+			
+			if (result.paging.curBlock <= result.paging.totalBlock)
+			{
+				page += "<a href='javascript:fn_viewComment(" + result.paging.nextPage + ")'>[다음]</a>";
+			}
+			if (result.paging.curPage < result.paging.totalPage)
+			{
+				page += "<a href='javascript:fn_viewComment(" + result.paging.totalPage + ")'>[끝]</a>";
+			}
+			
+			// 페이징 표기
+			$("#td_page").append(page);
+		
+			
+			// 댓글 내용
+			$(result.list).each(function(i) {
 				var str ="<tr>" 
-					+ "<td>" + result[i].REPLY_ID + "</td>" 
-					+ "<td>" + result[i].ARTICLE_ID + "</td>" 
-					+ "<td>" + result[i].USER_ID + "</td>" 
-					+ "<td>" + result[i].DESCRIPTION + "</td>" 
+					+ "<td>" + result.list[i].REPLY_ID + "</td>" 
+					+ "<td>" + result.list[i].ARTICLE_ID + "</td>" 
+					+ "<td>" + result.list[i].USER_ID + "</td>" 
+					+ "<td>" + result.list[i].DESCRIPTION + "</td>" 
 					+ "</tr>";
 					
+				// 댓글 표기
 				$("#reply_list").append(str);	
 			});
 		}

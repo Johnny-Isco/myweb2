@@ -196,16 +196,48 @@
 	<!-- 댓글 목록 쿼리 -->
 	<select id="selectCommentList" parameterType="HashMap" resultType="HashMap">
 		SELECT 
-			REPLY_ID, 
-			ARTICLE_ID, 
-			USER_ID, 
-			DESCRIPTION, 
-			TO_DATE(COMMENT_DATE, 'YYYY-MM-DD') 
+			B.RNUM, 
+			B.REPLY_ID, 
+			B.ARTICLE_ID, 
+			B.USER_ID, 
+			B.DESCRIPTION, 
+			TO_DATE(B.COMMENT_DATE, 'YYYY-MM-DD') 
+		FROM
+		(
+			SELECT 
+				ROWNUM AS RNUM, 
+				A.REPLY_ID, 
+				A.ARTICLE_ID, 
+				A.USER_ID, 
+				A.DESCRIPTION, 
+				A.COMMENT_DATE 
+			FROM
+			(
+				SELECT 
+					REPLY_ID, 
+					ARTICLE_ID, 
+					USER_ID, 
+					DESCRIPTION, 
+					COMMENT_DATE  
+				FROM 
+					BBS_COMMENT 
+				WHERE 
+					ARTICLE_ID = #{IDX} 
+				ORDER BY REPLY_ID ASC
+			) A 
+			WHERE ROWNUM <![CDATA[<=]]> #{END} 
+		) B 
+		WHERE B.RNUM <![CDATA[>=]]> #{START}
+	</select>
+	
+	<!-- 전체 댓글의 레코드 갯수를 구하는 쿼리 -->
+	<select id="commentListGetCount" parameterType="HashMap" resultType="int">
+		SELECT 
+			COUNT(*) 
 		FROM 
 			BBS_COMMENT 
-		WHERE 
-			ARTICLE_ID = #{IDX} 
-		ORDER BY REPLY_ID DESC
+		WHERE
+			ARTICLE_ID = #{IDX}
 	</select>
 	
 	<!-- 댓글 등록 쿼리 -->

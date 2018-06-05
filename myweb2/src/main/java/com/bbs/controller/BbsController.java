@@ -133,10 +133,27 @@ public class BbsController {
 	// 댓글 목록 메소드
 	@RequestMapping(value="/bbs/viewComment.do")
 	@ResponseBody
-	public List<Map<String, Object>> viewComment(CommandMap commandMap) throws Exception {
-		List<Map<String, Object>> list = bbsService.selectCommentList(commandMap.getMap());
+	public HashMap<String, Object> viewComment(CommandMap commandMap, 
+			@RequestParam(value="curPage", defaultValue="1")int curPage) throws Exception {
 		
-		return list;
+		// 전체 댓글의 레코드 갯수
+		int count = bbsService.commentListGetCount(commandMap.getMap());
+		
+		BbsPaging paging = new BbsPaging(count, curPage);
+		
+		// 현재 페이지 번호
+		int start = paging.getPageBegin();
+		// 현재 페이지 끝 번호
+		int end = paging.getPageEnd();
+		
+		List<Map<String, Object>> list = bbsService.selectCommentList(commandMap.getMap(), start, end);
+		
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("list", list);
+		map.put("count", count);
+		map.put("paging", paging);
+		
+		return map;
 	}
 	
 	// 댓글 등록 메소드
