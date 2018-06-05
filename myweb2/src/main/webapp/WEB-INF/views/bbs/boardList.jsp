@@ -7,7 +7,7 @@
 </head>
 <body>
 <h2>게시판 목록</h2>
-<a href="#" class="btn" id="write1">글쓰기</a>
+<a href="#" class="btn" id="home">메인화면</a>
 <p>${map.count }개의 게시물이 있습니다.</p>
 <p>
 	<select name="searchType" id="select_searchType">
@@ -103,7 +103,12 @@
 
 <script>
 $(document).ready(function(e) {
-	$("#write1, #write2").unbind("click").click(function(e) {
+	$("#home").unbind("click").click(function(e) {
+		e.preventDefault();
+		fn_openHome();
+	});
+	
+	$("#write").unbind("click").click(function(e) {
 		e.preventDefault();
 		fn_openBoardWrite();
 	});
@@ -113,6 +118,11 @@ $(document).ready(function(e) {
 		fn_searchList();
 	});
 });
+
+// 메인화면 이동 함수
+function fn_openHome() {
+	window.location.href="/home/openHome.do";
+}
 
 // 게시물 작성 화면 이동 함수
 function fn_openBoardWrite() {

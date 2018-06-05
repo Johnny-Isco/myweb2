@@ -28,6 +28,7 @@
 
 <div class="btn_area">
 	<a id="login_btn" class="btn">로그인</a>
+	<a id="home" class="btn">메인화면</a>
 </div>
 <%@ include file="/WEB-INF/include/include-body.jsp" %>
 
@@ -37,7 +38,18 @@ $(document).ready(function(e) {
 		e.preventDefault();
 		fn_login();
 	});
+	
+	$("#home").unbind("click").click(function(e) {
+		e.preventDefault();
+		fn_openHome();
+	});
 });
+
+// 메인화면 이동 함수
+function fn_openHome() {
+	window.location.href="/home/openHome.do";
+}
+
 
 // 로그인 함수
 function fn_login() {
