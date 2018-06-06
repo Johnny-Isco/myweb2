@@ -122,12 +122,10 @@ public class BbsController {
 	
 	// 게시물 삭제 메소드
 	@RequestMapping(value="/bbs/boardDelete.do")
-	public ModelAndView boardDelete(CommandMap commandMap) throws Exception {
+	@ResponseBody
+	public void boardDelete(CommandMap commandMap) throws Exception {
 		
 		bbsService.boardDelete(commandMap.getMap());
-		
-		ModelAndView mav = new ModelAndView("redirect:/bbs/openBoardList.do");
-		return mav;
 	}
 	
 	// 댓글 목록 메소드

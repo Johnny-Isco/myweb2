@@ -30,7 +30,8 @@
 			B.IDX, 
 			B.TITLE, 
 			B.HIT_CNT, 
-			B.CREA_DTM 
+			B.CREA_DTM, 
+			B.CREA_ID 
 		FROM 
 		(
 			SELECT 
@@ -38,26 +39,30 @@
 				A.IDX, 
 				A.TITLE, 
 				A.HIT_CNT, 
-				A.CREA_DTM 
+				A.CREA_DTM, 
+				A.CREA_ID  
 			FROM 
 			(
 				SELECT 
 					IDX, 
 					TITLE, 
 					HIT_CNT, 
-					CREA_DTM 
+					CREA_DTM, 
+					CREA_ID 
 				FROM 
 					TB_BOARD 
+				WHERE
+					DEL_GB = 'N' 
 				<choose>
 					<when test="SEARCH_TYPE == 'TITLE' ">
 						<if test="SEARCH_WORD != NULL and SEARCH_WORD != '' ">
-							WHERE 
+							AND 
 								TITLE LIKE '%' || #{SEARCH_WORD} || '%'
 						</if>
 					</when>
 					<when test="SEARCH_TYPE == 'NO' ">
 						<if test="SEARCH_WORD != NULL and SEARCH_WORD != '' ">
-							WHERE 
+							AND 
 								IDX = #{SEARCH_WORD}
 						</if>
 					</when>
@@ -92,7 +97,7 @@
 			0, 
 			'N', 
 			SYSDATE, 
-			'Admin'
+			#{CREA_ID}
 		)
 	</insert>
 	
@@ -114,7 +119,7 @@
 			#{ORIGINAL_FILE_NAME}, 
 			#{STORED_FILE_NAME}, 
 			#{FILE_SIZE}, 
-			'Admin'
+			#{CREA_ID}
 		)
 	</insert>
 	
@@ -122,7 +127,7 @@
 	<update id="updateHitCnt" parameterType="HashMap">
 		UPDATE TB_BOARD 
 		SET 
-			HIT_CNT = NVL(HIT_CNT, 0) 
+			HIT_CNT = NVL(HIT_CNT, 0) + 1
 		WHERE
 			IDX = #{IDX}
 	</update>

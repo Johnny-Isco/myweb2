@@ -6,40 +6,44 @@
 <%@ include file="/WEB-INF/include/include-header.jsp" %>
 </head>
 <body>
-<form id="frm" name="frm" enctype="multipart/form-data">
-<table class="board_view">
-	<colgroup>
-		<col width="15" />
-		<col width="*" />
-	</colgroup>
+<%@ include file="/WEB-INF/include/include-title.jsp" %>
+<div class="container">
+	<form class="form" id="frm" name="frm" enctype="multipart/form-data">
+		<table class="table">
+			<colgroup>
+				<col width="5%">
+				<col width="*">
+			</colgroup>
+			<caption>게시글 작성</caption>
+			<tbody>
+				<tr>
+					<td colspan="2">
+						<input type="text" id="TITLE" name="TITLE" class="form-control" placeholder="제목" autofocus="autofocus">
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<textarea rows="20" cols="100" title="내용" id="CONTENTS" name="CONTENTS" class="form-control" placeholder="내용"></textarea>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		
+		<div class="form-group" id="fileDiv">
+			<p>
+				<input type="file" id="file" name="file_0">
+				<button class="btn btn-default" id="delete" onclick="fn_deleteFile(this)"> 삭제</button>
+			</p>
+		</div>
+		<br><br>
+		
+		<button class="btn btn-default" id="addFile">파일추가</button>
+		<button class="btn btn-primary" id="write">작성하기</button>
+		<button class="btn btn-default" id="list">목록으로</button>
 	
-	<caption>게시글 작성</caption>
-	
-	<tbody>
-		<tr>
-			<th scope="row">제목</th>
-			<td><input type="text" id="TITLE" name="TITLE" class="wdp_90" /></td>
-		</tr>
-		<tr>
-			<td colspan="2" class="view_text">
-				<textarea rows="20" cols="100" title="내용" id="CONTENTS" name="CONTENTS"></textarea>
-			</td>
-		</tr>
-	</tbody>
-</table>
-<div id="fileDiv">
-	<p>
-		<input type="file" id="file" name="file_0">
-		<a href="#" class="btn" id="delete" name="delete"> 삭제</a>
-	</p>
+		<input type="hidden" id="CREA_ID" name="CREA_ID" value="${loginInfo.ID }">
+	</form>
 </div>
-<br><br>
-
-<a href="#" class="btn" id="addFile">파일추가</a>
-<a href="#" class="btn" id="write">작성하기</a>
-<a href="#" class="btn" id="list">목록으로</a>
-
-</form>
 
 <%@ include file="/WEB-INF/include/include-body.jsp" %>
 
@@ -54,17 +58,23 @@ $(document).ready(function() {
 	
 	$("#write").unbind("click").click(function(e) {
 		e.preventDefault();
-		fn_insertBoard();
+		if ($("#TITLE").val().length < 1)
+		{
+			alert("제목을 입력해주세요.");
+		}
+		else if ($("#CONTENTS").val().length < 1)
+		{
+			alert("내용을 입력해주세요.");
+		}
+		else
+		{
+			fn_insertBoard();
+		}
 	});
 	
 	$("#addFile").unbind("click").click(function(e) {
 		e.preventDefault();
 		fn_addFile();
-	});
-	
-	$("a[name='delete']").unbind("click").click(function(e) {
-		e.preventDefault();
-		fn_deleteFile($(this));
 	});
 });
 
@@ -86,19 +96,21 @@ function fn_insertBoard() {
 function fn_addFile() {
 	var str = "<p>"
 		+ "<input type='file' name='file_" + (gfv_count++) + "'>"
-		+ "<a href='#' class='btn' name='delete'>삭제</a>"
+		+ "<button class='btn btn-default' onclick='fn_deleteFile(this)'>삭제</button>"
 		+ "</p>";
 	
 	$("#fileDiv").append(str);
-	$("a[name='delete']").unbind("click").click(function(e) {
+	/*
+	$("button[name='delete']").unbind("click").click(function(e) {
 		e.preventDefault();
 		fn_deleteFile($(this));
 	});
+	*/
 }
 
 // 첨부파일 삭제 이벤트 함수
 function fn_deleteFile(obj) {
-	obj.parent().remove();
+	$(obj).parent().remove();
 }
 </script>
 </body>

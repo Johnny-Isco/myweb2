@@ -5,60 +5,67 @@
 <head>
 <%@ include file="/WEB-INF/include/include-header.jsp" %>
 <style>
-.board_list {width: 500px; margin: 0 auto;}
-.board_list tfoot {text-align: center;}
+.table {width: 500px; margin: 0 auto;}
+.table tfoot {text-align: center;}
 .signUp_agree {text-align: center;}
 .signUp_agree_textarea {text-align: center;}
 .signUp_agree_textarea textarea {resize: none;}
 </style>
 </head>
 <body>
-<form id="frm">
-<table class="board_list">
-	<caption>회원가입</caption>
-	<thead>
-		<tr>
-			<td colspan="3" class="signUp_agree">약관동의</td>
-		</tr>
-		<tr>
-			<td colspan="3" class="signUp_agree_textarea"><textarea rows="20" cols="100" readonly="readonly">회원가입 약관동의 내용</textarea></td>
-		</tr>
-		<tr>
-			<td colspan="3" class="signUp_agree_checkbox"><input type="checkbox" id="agree_checkbox">약관에 동의</td>
-		</tr>
-	</thead>
-	<tbody>
-		<tr>
-			<th scope="row">이름</th>
-			<td><input type="text" id="user_name" name="NAME" class="wdp_90"></td>
-			<td></td>
-		</tr>
-		<tr>
-			<th scope="row">전화번호</th>
-			<td><input type="text" id="user_tel" name="TEL" class="wdp_90"></td>
-			<td></td>
-		</tr>
-		<tr>
-			<th scope="row">아이디</th>
-			<td><input type="text" id="user_id" name="ID" class="wdp_90"></td>
-			<td><a href="#" id="user_id_checkBtn" class="btn">중복확인</a></td>
-		</tr>
-		<tr>
-			<th scope="row">비밀번호</th>
-			<td><input type="password" id="user_pwd" name="PASSWORD" class="wdp_90"></td>
-			<td></td>
-		</tr>
-	</tbody>
-	<tfoot>
-		<tr>
-			<td colspan="3">
-				<a href="#" class="btn" id="signUpBtn">회원가입</a>
-				<a href="#" class="btn" id="homeBtn">취소</a>
-			</td>
-		</tr>
-	</tfoot>
-</table>
-</form>
+<%@ include file="/WEB-INF/include/include-title.jsp" %>
+<div class="container">
+	<form id="frm">
+		<div class="row">
+			<div class="col-md-12">
+				<table class="table">
+					<caption>회원가입</caption>
+					<thead>
+						<tr>
+							<td colspan="3" class="signUp_agree">약관동의</td>
+						</tr>
+						<tr>
+							<td colspan="3" class="signUp_agree_textarea"><textarea rows="20" cols="100" readonly="readonly">회원가입 약관동의 내용</textarea></td>
+						</tr>
+						<tr>
+							<td colspan="3" class="signUp_agree_checkbox"><input type="checkbox" id="agree_checkbox" placeholder="">약관에 동의</td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<th scope="row">이름</th>
+							<td><input type="text" id="user_name" name="NAME" class="form-control" placeholder="이름을 입력해주세요." autofocus="autofocus"></td>
+							<td></td>
+						</tr>
+						<tr>
+							<th scope="row">전화번호</th>
+							<td><input type="text" id="user_tel" name="TEL" class="form-control" placeholder="ex) 010-1234-1234"></td>
+							<td></td>
+						</tr>
+						<tr>
+							<th scope="row">아이디</th>
+							<td><input type="text" id="user_id" name="ID" class="form-control" placeholder="아이디를 입력해주세요."></td>
+							<td><button id="user_id_checkBtn" class="btn btn-primary">중복확인</button></td>
+						</tr>
+						<tr>
+							<th scope="row">비밀번호</th>
+							<td><input type="password" id="user_pwd" name="PASSWORD" class="form-control" placeholder="비밀번호를 입력해주세요."></td>
+							<td></td>
+						</tr>
+					</tbody>
+					<tfoot>
+						<tr>
+							<td colspan="3">
+								<button class="btn btn-success" id="signUpBtn">회원가입</button>
+								<button class="btn" id="homeBtn">취소</button>
+							</td>
+						</tr>
+					</tfoot>
+				</table>
+			</div>
+		</div>
+	</form>
+</div>
 <%@ include file="/WEB-INF/include/include-body.jsp" %>
 
 <script>

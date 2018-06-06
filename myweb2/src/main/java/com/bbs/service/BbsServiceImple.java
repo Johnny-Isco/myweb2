@@ -107,7 +107,7 @@ public class BbsServiceImple implements BbsService {
 	// 게시물 삭제 로직 호출
 	@Override
 	public void boardDelete(Map<String, Object> map) throws Exception {
-		
+		bbsDAO.deleteFileList(map);
 		bbsDAO.boardDelete(map);
 	}
 	
