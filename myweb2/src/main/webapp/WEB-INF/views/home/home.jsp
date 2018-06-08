@@ -19,7 +19,7 @@
 		<p class="lead">
 			게시판 웹 프로젝트에요.
 		</p>
-			<!-- 
+		<!-- 
 		<ul>
 			<li><a href="#" id="signUpBtn">회원가입</a></li>
 			<c:choose>
@@ -44,7 +44,7 @@
 					<label for="inputPassword" class="sr-only">Password</label>
 					<input type="password" id="user_pwd" name="PASSWORD" class="form-control" placeholder="Password">
 					<div class="checkbox">
-						<label><input type="checkbox" value="remember-me">로그인 상태 유지</label>
+						<label><input type="checkbox" id="chk_cookie" name="isUseCookie" value="Y">로그인 상태 유지</label>
 					</div>
 					<button class="btn btn-lg btn-primary btn-block" id="login_btn">로그인</button>
 					<button class="btn btn-lg btn-success btn-block" id="signUp_btn">회원가입</button>
@@ -98,15 +98,21 @@ $(document).ready(function(e) {
 
 // 로그인 함수
 function fn_login() {
+	var userData = {
+			"ID"			: $("#user_id").val(),
+			"PASSWORD"		: $("#user_pwd").val(),
+			"isUseCookie"	: $("#chk_cookie").prop("checked") == true ? "Y" : "N"
+	};
+	
 	$.ajax({
 		type	: "POST",
 		url		: "/user/login.do",
-		data	: $("#frm").serialize(),
+		data	: userData,
 		dataType: "json",
 		error	: function(request, status, error) {
 			alert("서버가 응답하지 않습니다." + "\n" + "다시 시도해주시기 바랍니다." + "\n" 
 					+ "code: " + request.status + "\n" 
-					+ "message : " + request.responseText + "\n" 
+					+ "message : " + status + "\n" 
 					+ "error: " + error);
 		},
 		success	: function(result) {

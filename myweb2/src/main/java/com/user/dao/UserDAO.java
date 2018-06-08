@@ -1,5 +1,6 @@
 package com.user.dao;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.stereotype.Repository;
@@ -23,7 +24,18 @@ public class UserDAO extends AbstractDAO {
 
 	// 로그인 쿼리 호출
 	@SuppressWarnings("unchecked")
-	public Map<String, Object> selectUserInfo(Map<String, Object> map) {
+	public Map<String, Object> selectUserInfo(Map<String, Object> map) throws Exception {
 		return (Map<String, Object>)selectOne("user.selectUserInfo", map);
+	}
+
+	// 자동로그인 세션ID 저장 쿼리 호출
+	public void keepLogin(Map<String, Object> map) throws Exception {
+		update("user.keepLogin", map);
+	}
+
+	// 자동로그인 쿼리 호출
+	@SuppressWarnings("unchecked")
+	public HashMap<String, Object> checkUserInfoWithCookie(HashMap<String, Object> map) throws Exception {
+		return (HashMap<String, Object>)selectOne("user.checkUserInfoWithCookie", map);
 	}
 }

@@ -17,7 +17,9 @@ body {margin-top: 100px;}
 	<div id="navbar" class="collapse navbar-collapse">
 		<ul class="nav navbar-nav">
 			<li><a href="#" id="nav_home_btn">HOME</a></li>
+			<!-- 
 			<li><a href="#" id="nav_signUp_btn">회원가입</a></li>
+			 -->
 			<c:choose>
 				<c:when test="${loginInfo == null }">
 					<li><a href="#" id="nav_login_btn">로그인</a></li>	
@@ -37,14 +39,17 @@ $(document).ready(function() {
 		e.preventDefault();
 		window.location.href="/home/openHome.do";
 	});
+	
+	/*
 	$("#nav_signUp_btn").unbind("click").click(function(e) {
 		e.preventDefault();
 		window.location.href="/user/openSignUp.do";
 	});
+	*/
 	
 	$("#nav_login_btn").unbind("click").click(function(e) {
 		e.preventDefault();
-		window.location.href="/user/openLogin.do";
+		window.location.href="/home/openHome.do";
 	});
 	
 	$("#nav_logout_btn").unbind("click").click(function(e) {

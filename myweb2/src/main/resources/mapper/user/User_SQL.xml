@@ -42,4 +42,28 @@
 		WHERE 
 			ID LIKE #{ID}
 	</select>
+	
+	<!-- 세션 아이디 저장 쿼리 -->
+	<update id="keepLogin">
+		UPDATE 
+			USER_INFO 
+		SET 
+			SESSIONKEY = #{SESSIONID}, 
+			SESSIONLIMIT = #{SESSIONLIMIT} 
+		WHERE 
+			ID LIKE #{loginInfo.ID}
+	</update>
+	
+	<!-- 쿠키 유무에 따른 로그인 정보 조회 쿼리 -->
+	<select id="checkUserInfoWithCookie" resultType="HashMap">
+		SELECT 
+			NO, 
+			NAME, 
+			TEL, 
+			ID 
+		FROM USER_INFO 
+		WHERE 
+			SESSIONKEY LIKE #{SESSIONID} 
+			AND SESSIONLIMIT > SYSDATE
+	</select>
 </mapper>
