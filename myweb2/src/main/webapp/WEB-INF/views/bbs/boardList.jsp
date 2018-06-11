@@ -56,7 +56,9 @@
 		                    <tr>
 		                        <td>${row.IDX }</td>
 		                        <td style="text-align: left;">
-		                        	<a href="javascript:fn_openBoardDetail('${row.IDX }', '${map.paging.curPage }', '${map.saerchType }', '${map.searchWord }')" name="title"><c:out value="${row.TITLE }" /></a>
+		                        	<a href="javascript:fn_openBoardDetail('${row.IDX }', '${map.paging.curPage }', '${map.saerchType }', '${map.searchWord }')">
+		                        		<c:out value="${row.TITLE }(${row.COMMENTCNT })" />
+	                        		</a>
 		                        	<input type="hidden" id="IDX" name="IDX" value="${row.IDX }" />
 		                        </td>
 		                        <td>${row.CREA_ID }</td>
@@ -70,7 +72,7 @@
 		                    <td colspan="4">조회된 결과가 없습니다.</td>
 		                </tr>
 		            </c:otherwise>
-		        </c:choose>
+	        	</c:choose>
 		        <tr>
 		        	<td colspan="4" style="text-align: center;">
 		        		<!-- 처음 페이지로 이동 : 현재 페이지가 1보다 크면 [처음]을 출력 -->

@@ -31,7 +31,8 @@
 			B.TITLE, 
 			B.HIT_CNT, 
 			B.CREA_DTM, 
-			B.CREA_ID 
+			B.CREA_ID, 
+			B.COMMENTCNT 
 		FROM 
 		(
 			SELECT 
@@ -40,7 +41,8 @@
 				A.TITLE, 
 				A.HIT_CNT, 
 				A.CREA_DTM, 
-				A.CREA_ID  
+				A.CREA_ID, 
+				A.COMMENTCNT 
 			FROM 
 			(
 				SELECT 
@@ -48,7 +50,8 @@
 					TITLE, 
 					HIT_CNT, 
 					CREA_DTM, 
-					CREA_ID 
+					CREA_ID, 
+					(SELECT COUNT(*) AS CMMT FROM BBS_COMMENT WHERE BBS_COMMENT.ARTICLE_ID = TB_BOARD.IDX) AS COMMENTCNT 
 				FROM 
 					TB_BOARD 
 				WHERE

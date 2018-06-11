@@ -92,6 +92,10 @@ public class BbsPaging {
 
 	public void setTotalPage(int count) {
 		// Math.ceil(실수) 반올림 처리
+		// totalPage = (int)Math.ceil(count * 1.0 / PAGE_SCALE);
+		// 실수 반올림 처리를 안하는 이유는 
+		// 게시물이 537 * 1.0 / 10을 했을 때 나오는 결과가 53.7이다.
+		// 결과적으로 53페이지가 끝이어야하는데 반올림 시 54페이지를 만들어버림.
 		totalPage = (int)Math.ceil(count * 1.0 / PAGE_SCALE);
 	}
 
