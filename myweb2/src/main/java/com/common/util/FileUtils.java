@@ -21,6 +21,8 @@ public class FileUtils {
 
 	// 첨부파일 서버 저장 경로
 	private static final String filePath = "c:\\dev\\file\\";
+	// 프로젝트 내 저장 경로
+	private static final String filePath2 = "I:\\Eclipse Oxgen\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\myweb2\\img\\";
 	
 	// 첨부파일 추가 처리 로직
 	public List<Map<String, Object>> parseInsertFileInfo(Map<String, Object> map, HttpServletRequest request) throws Exception {
@@ -52,7 +54,12 @@ public class FileUtils {
 				originalFileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
 				storedFileName = CommonUtils.getRandomString() + originalFileExtension;
 				
+				// 실제 경로에 저장
 				file = new File(filePath + storedFileName);
+				multipartFile.transferTo(file);
+				
+				// 프로젝트 경로의 img 폴더에 저장
+				file = new File(filePath2 + storedFileName);
 				multipartFile.transferTo(file);
 				
 				listMap = new HashMap<String, Object>();
@@ -95,6 +102,7 @@ public class FileUtils {
 				storedFileName = CommonUtils.getRandomString() + originalFileExtension;
 				
 				multipartFile.transferTo(new File(filePath + storedFileName));
+				multipartFile.transferTo(new File(filePath2 + storedFileName));
 				
 				listMap = new HashMap<String, Object>();
 				listMap.put("IS_NEW", "Y");
