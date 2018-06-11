@@ -33,7 +33,14 @@
 				<td>${map.CREA_DTM }</td>
 			</tr>
 			<tr>
-				<td colspan="4"><c:out value="${map.CONTENTS }" /></td>
+				<td colspan="4">
+					<c:out value="${map.CONTENTS }" />
+					<c:forEach var="row" items="${list }">
+						<p>
+							<img src="<c:out value="/img/${row.STORED_FILE_NAME } " />" width="500"/>
+						</p>
+					</c:forEach>
+				</td>
 			</tr>
 			<tr>
 				<th scope="row">첨부파일</th>

@@ -81,7 +81,6 @@ public class BbsController {
 			@RequestParam(value="curPage", defaultValue="1")int curPage, 
 			@RequestParam(value="searchType", defaultValue="TITLE")String searchType, 
 			@RequestParam(value="searchWord", defaultValue="")String searchWord) throws Exception {
-		
 		Map<String, Object> map = bbsService.selectBoardDetail(commandMap.getMap());
 		
 		ModelAndView mav = new ModelAndView("/bbs/boardDetail");

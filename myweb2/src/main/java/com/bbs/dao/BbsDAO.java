@@ -70,10 +70,6 @@ public class BbsDAO extends AbstractDAO {
 
 	// 게시물 수정 쿼리 호출
 	public void boardUpdate(Map<String, Object> map) throws Exception {
-		if (log.isDebugEnabled())
-		{
-			log.debug(map);
-		}
 		update("bbs.boardUpdate", map);
 	}
 	
