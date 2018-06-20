@@ -30,7 +30,7 @@
 			B.IDX, 
 			B.TITLE, 
 			B.HIT_CNT, 
-			B.CREA_DTM, 
+			TO_CHAR(B.CREA_DTM, 'YYYY-MM-DD hh:mm') AS CREA_DTM,  
 			B.CREA_ID, 
 			B.COMMENTCNT 
 		FROM 
