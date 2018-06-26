@@ -55,6 +55,7 @@
 			<div class="right_layout">
 				<div class="menu_layout">
 					<h1><button class="btn btn-lg btn-default btn-block" id="bbs_btn">게시판</button></h1>
+					<h1><button class="btn btn-lg btn-default btn-block" id="weather_btn">날씨정보</button></h1>
 					<h1><button class="btn btn-lg btn-default btn-block" id="logout_btn">로그아웃</button></h1>
 				</div>
 			</div>
@@ -88,6 +89,11 @@ $(document).ready(function(e) {
 	$("#bbs_btn").unbind("click").click(function(e) {
 		e.preventDefault();
 		fn_bbs();
+	});
+	
+	$("#weather_btn").unbind("click").click(function(e) {
+		e.preventDefault();
+		fn_weather();
 	});
 	
 	$("#logout_btn").unbind("click").click(function(e) {
@@ -132,6 +138,11 @@ function fn_login() {
 // 게시판 이동 함수
 function fn_bbs() {
 	window.location.href="/bbs/openBoardList.do";
+}
+
+// 날씨정보 이동 함수
+function fn_weather() {
+	window.location.href="/crawler/openWeather.do";
 }
 
 // 로그아웃 함수

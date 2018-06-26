@@ -29,6 +29,7 @@ body {margin-top: 100px;}
 				</c:otherwise>
 			</c:choose>
 			<li><a href="#" id="nav_bbs_btn">게시판</a>
+			<li><a href="#" id="nav_weather_btn">날씨정보</a></li>
 		</ul>
 	</div>
 </nav>
@@ -63,6 +64,11 @@ $(document).ready(function() {
 	$("#nav_bbs_btn").unbind("click").click(function(e) {
 		e.preventDefault();
 		window.location.href="/bbs/openBoardList.do";
+	});
+	
+	$("#nav_weather_btn").unbind("click").click(function(e) {
+		e.preventDefault();
+		window.location.href="/crawler/openWeather.do";
 	});
 });
 </script>
