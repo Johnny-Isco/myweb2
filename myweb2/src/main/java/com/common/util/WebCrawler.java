@@ -9,6 +9,7 @@ import java.util.Date;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -23,14 +24,14 @@ public class WebCrawler {
 	
 	// 프로세스 처리 시간 체크용 함수
 	public static String getCurrentData() {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
+		SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
 		return sdf.format(new Date());
 	}
 
 	// 네이버 날씨 크롤링 메소드
 	public Object getWeatherInfo() throws Exception {
 		// 작업 시작 전 시간 기록
-		log.debug(" Start Date : " + getCurrentData());
+		log.debug("Start Date : " + getCurrentData());
 		
 		// 가져올 HTTP 주소 세팅
 		HttpPost http = new HttpPost("https://weather.naver.com/rgn/cityWetrMain.nhn");
@@ -62,7 +63,7 @@ public class WebCrawler {
 		}
 		
 		// 가져온 DOM을 로그로 출력
-		log.debug(sb.toString());
+		//log.debug(sb.toString());
 		
 		// Jsoup으로 파싱하기
 		Document doc = Jsoup.parse(sb.toString());
@@ -99,5 +100,94 @@ public class WebCrawler {
 		}
 		*/
 		return el;
+	}
+	
+	// 프리미어 리그 순위표 크롤링 메소드
+	public Object getPremireLeague() throws Exception {
+		log.debug("Start Date : " + getCurrentData());
+		
+		HttpGet http = new HttpGet("https://www.premierleague.com/tables?co=1&se=210&ha=-1&team=FIRST");
+		//HttpPost http = new HttpPost("https://www.premierleague.com/tables?co=1&se=79&ha=-1");
+		
+		HttpClient httpClient = HttpClientBuilder.create().build();
+		
+		HttpResponse response = httpClient.execute(http);
+		
+		HttpEntity entity = response.getEntity();
+		
+		ContentType contentType = ContentType.getOrDefault(entity);
+		Charset charset = contentType.getCharset();
+		
+		BufferedReader br = new BufferedReader(new InputStreamReader(entity.getContent(), charset));
+		
+		StringBuffer sb = new StringBuffer();
+		
+		String line = "";
+		while((line=br.readLine()) != null)
+		{
+			sb.append(line + "\n");
+		}
+		
+		Document doc = Jsoup.parse(sb.toString());
+		
+		Elements el = doc.select(".table.wrapper.col-12").eq(0);
+		
+		el.select(".visuallyHidden").remove();
+		el.select(".expandable").remove();
+		
+		// 다음경기 행 삭제
+		el.select("table thead>tr>th:eq(11)").remove();
+		el.select("table tbody>tr>td:eq(11)").remove();
+		
+		log.debug("End Date : " + getCurrentData());
+		
+		return el.html();
+	}
+	
+	// 프리메라 리가 순위표 크롤링 메소드
+	public Object getLaliga() throws Exception {
+		log.debug("Start Date : " + getCurrentData());
+		
+		HttpPost http = new HttpPost("http://www.laliga.es/en/laliga-santander");
+		
+		HttpClient httpClient = HttpClientBuilder.create().build();
+		
+		HttpResponse response = httpClient.execute(http);
+		
+		HttpEntity entity = response.getEntity();
+		
+		ContentType contentType = ContentType.getOrDefault(entity);
+		Charset charset = contentType.getCharset();
+		
+		BufferedReader br = new BufferedReader(new InputStreamReader(entity.getContent(), charset));
+		
+		StringBuffer sb = new StringBuffer();
+		
+		String line = "";
+		while((line=br.readLine()) != null)
+		{
+			sb.append(line + "\n");
+		}
+		
+		Document doc = Jsoup.parse(sb.toString());
+		
+		Elements el = doc.select("#div_clasf_38_1_5");
+		
+		el.select(".cabecera-seccion").remove();
+		el.select(".cabecera-completa").remove();
+		el.select(".selector-tipo-clasificacion ul").remove();
+		el.select("script").remove();
+		// 의미없는 열 삭제
+		el.select("thead tr>th:eq(1)").remove();
+		el.select("tbody tr>td.contenedor-flecha").remove();
+		// 홈, 어웨이 데이터 제거
+		el.select("th.dato-clasificacion.casa").remove();
+		el.select("th.dato-clasificacion.fuera").remove();
+		el.select("td.contenedor-numero.dato-clasificacion.casa").remove();
+		el.select("td.contenedor-numero.dato-clasificacion.fuera").remove();
+		
+		log.debug("End Date : " + getCurrentData());
+		
+		return el.html();
 	}
 }

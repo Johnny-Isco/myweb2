@@ -30,6 +30,7 @@ body {margin-top: 100px;}
 			</c:choose>
 			<li><a href="#" id="nav_bbs_btn">게시판</a>
 			<li><a href="#" id="nav_weather_btn">날씨정보</a></li>
+			<li><a href="#" id="nav_league_btn">유럽축구 리그표</a></li>
 		</ul>
 	</div>
 </nav>
@@ -69,6 +70,11 @@ $(document).ready(function() {
 	$("#nav_weather_btn").unbind("click").click(function(e) {
 		e.preventDefault();
 		window.location.href="/crawler/openWeather.do";
+	});
+	
+	$("#nav_league_btn").unbind("click").click(function(e) {
+		e.preventDefault();
+		window.location.href="/crawler/openSoccerLeagueTable.do";
 	});
 });
 </script>

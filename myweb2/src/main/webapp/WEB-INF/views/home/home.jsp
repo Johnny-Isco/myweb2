@@ -56,6 +56,7 @@
 				<div class="menu_layout">
 					<h1><button class="btn btn-lg btn-default btn-block" id="bbs_btn">게시판</button></h1>
 					<h1><button class="btn btn-lg btn-default btn-block" id="weather_btn">날씨정보</button></h1>
+					<h1><button class="btn btn-lg btn-default btn-block" id="league_btn">유럽축구 리그표</button></h1>
 					<h1><button class="btn btn-lg btn-default btn-block" id="logout_btn">로그아웃</button></h1>
 				</div>
 			</div>
@@ -94,6 +95,11 @@ $(document).ready(function(e) {
 	$("#weather_btn").unbind("click").click(function(e) {
 		e.preventDefault();
 		fn_weather();
+	});
+	
+	$("#league_btn").unbind("click").click(function(e) {
+		e.preventDefault();
+		fn_league();
 	});
 	
 	$("#logout_btn").unbind("click").click(function(e) {
@@ -143,6 +149,11 @@ function fn_bbs() {
 // 날씨정보 이동 함수
 function fn_weather() {
 	window.location.href="/crawler/openWeather.do";
+}
+
+// 유럽축구 리그표 이동 함수
+function fn_league() {
+	window.location.href="/crawler/openSoccerLeagueTable.do";
 }
 
 // 로그아웃 함수
