@@ -42,43 +42,6 @@ public class BbsServiceImple implements BbsService {
 		
 		List<Map<String, Object>> list = bbsDAO.selectBoardList(map, start, end, searchType, searchWord);
 		
-		// 현재 시스템의 날짜 정보를 가져온다.
-		Calendar today = Calendar.getInstance();
-		
-		// 년도
-		String this_year = Integer.toString(today.get(Calendar.YEAR));
-		// 월(0~11, 0: 1월)
-		// 월에 대한 값이 0월~11월이므로 + 1을 더하여 1월~12월로 값을 조정한다.
-		String this_month = Integer.toString((today.get(Calendar.MONTH) + 1));
-		// 월데이터의 자릿수가 두자릿수보다 작으면 앞에 0을 붙여서 표현한다. ex) 1월 => 01월
-		// 이는 DB에서 조회한 월 데이터가 01, 02로 두자릿수로 표현되기 때문이다.
-		this_month = this_month.length() < 2 ? "0" + this_month : this_month;
-		// 이 달의 일
-		String this_day = Integer.toString(today.get(Calendar.DATE));
-		
-		for (int i = 0; i < list.size(); i++)
-		{
-			// DB년도
-			String db_year = list.get(i).get("CREA_DTM").toString().substring(0, 4);
-			// DB월
-			String db_month = list.get(i).get("CREA_DTM").toString().substring(5, 7);
-			// DB일
-			String db_day = list.get(i).get("CREA_DTM").toString().substring(8, 10);
-			// DB시간
-			String db_time = list.get(i).get("CREA_DTM").toString().substring(11);
-			
-			// 현재 날짜와 게시글이 DB에 등록된 날짜가 동일하다면 게시글이 등록된 시간만 표현한다.
-			if (db_year.equals(this_year) && db_month.equals(this_month) && db_day.equals(this_day))
-			{
-				list.get(i).put("CREA_DTM", db_time);
-			}
-			// 현재 날짜와 게시글이 DB에 등록된 날짜가 동일하지 않다면 게시글이 등록된 날짜를 표현한다.
-			else
-			{
-				list.get(i).put("CREA_DTM", db_year + "-" + db_month + "-" + db_day);
-			}
-		}
-		
 		return list;
 	}
 	
