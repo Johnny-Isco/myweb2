@@ -32,6 +32,7 @@
 				<th scope="row">작성시간</th>
 				<td>${map.CREA_DTM }</td>
 			</tr>
+			<!-- 
 			<tr>
 				<td colspan="4">
 					<c:out value="${map.CONTENTS }" />
@@ -42,6 +43,7 @@
 					</c:forEach>
 				</td>
 			</tr>
+			 -->
 			<tr>
 				<th scope="row">첨부파일</th>
 				<td colspan="3">
